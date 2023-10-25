@@ -8,12 +8,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 class getxController extends GetxController {
   List<dynamic> timkiem = [];
   List<Student> listStudent = [];
+  String searchText = '';
   Dio dio = Dio();
-  @override
   @override
   void onInit() {
     super.onInit();
     fetchData();
+  }
+
+  void search(String value) {
+    timkiem.clear();
+    if (timkiem.isEmpty) {
+      timkiem.addAll(listStudent);
+    } else {
+      List<Student> filteredStudents = listStudent.where((student) {
+        return student.name!.toLowerCase().contains(searchText.toLowerCase());
+      }).toList();
+      timkiem.addAll(filteredStudents);
+    }
   }
 
   Future<void> fetchData() async {
@@ -26,7 +38,7 @@ class getxController extends GetxController {
             data.map((studentJson) => Student.fromJson(studentJson)).toList();
         listStudent.assignAll(newStudents);
         saveToSharedPreferences(listStudent);
-        print(newStudents);
+        print('Data fetched successfully: $newStudents');
       }
     } catch (e) {
       print(e);
