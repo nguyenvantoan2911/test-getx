@@ -1,10 +1,15 @@
-import 'package:app_lo/getx_controller.dart';
-import 'package:app_lo/my_app.dart';
+import 'package:app_lo/home/my_app.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-void main() {
-  runApp(GetMaterialApp(
-    home: MyApp(),
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  runApp(EasyLocalization(
+    supportedLocales: const [Locale('en', 'US'), Locale('vi', 'VN')],
+    path: 'asset/translations',
+    fallbackLocale: const Locale('en', 'US'),
+    child: const MyApp(),
   ));
 }

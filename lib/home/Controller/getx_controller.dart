@@ -1,18 +1,24 @@
 import 'dart:convert';
 
-import 'package:app_lo/student.dart';
+import 'package:app_lo/home/Controller/student.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class getxController extends GetxController {
-  List<dynamic> timkiem = [];
-  List<Student> listStudent = [];
+  List<dynamic> timkiem = [].obs;
+  List<Student> listStudent = <Student>[].obs;
   String searchText = '';
   Dio dio = Dio();
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    // List<Student> data = await getFromSharedPreferences();
+    // if (data.isNotEmpty) {
+    //   listStudent.addAll(data);
+    // } else {
+    //   fetchData();
+    // }
     fetchData();
   }
 
@@ -24,7 +30,7 @@ class getxController extends GetxController {
       List<Student> filteredStudents = listStudent.where((student) {
         return student.name!.toLowerCase().contains(searchText.toLowerCase());
       }).toList();
-      timkiem.addAll(filteredStudents);
+      timkiem.assignAll(filteredStudents);
     }
   }
 
@@ -38,7 +44,7 @@ class getxController extends GetxController {
             data.map((studentJson) => Student.fromJson(studentJson)).toList();
         listStudent.assignAll(newStudents);
         saveToSharedPreferences(listStudent);
-        print('Data fetched successfully: $newStudents');
+        update(listStudent);
       }
     } catch (e) {
       print(e);
@@ -54,10 +60,18 @@ class getxController extends GetxController {
 
   Future<List<Student>> getFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final studentsJson = prefs.getStringList('students') ?? [];
-    final students = studentsJson
-        .map((studentJson) => Student.fromJson(json.decode(studentJson)))
-        .toList();
-    return students;
+    List<Student> studentsSr = [];
+    if (prefs.containsKey('students')) {
+      final studentsJson = prefs.getStringList('students');
+      if (studentsJson != null) {
+        studentsSr = studentsJson
+            .map((studentJ) => Student.fromJson(json.decode(studentJ)))
+            .toList();
+        return studentsSr;
+      }
+      return studentsSr;
+    } else {
+      return studentsSr;
+    }
   }
 }
