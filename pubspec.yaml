@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  easy_localization: ^3.0.3
   provider: ^6.0.5
 
 
@@ -68,9 +67,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - asset/translations/
-    - asset/images/vietnam-removebg-preview.png
-    - asset/images/anh-removebg-preview.png
+    - assets/images/vietnam-removebg-preview.png
+    - assets/images/anh-removebg-preview.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,17 +14,15 @@ class translations extends StatelessWidget {
           _buttonIcon(
               onPressed: () {
                 Get.back();
-                context.setLocale(const Locale("vi", "VN"));
               },
-              image: 'asset/images/vietnam-removebg-preview.png',
+              image: 'assets/images/vietnam-removebg-preview.png',
               name: "Tiếng việt"),
           const Divider(),
           _buttonIcon(
-              onPressed: () {
+              onPressed: () async {
                 Get.back();
-                context.setLocale(const Locale('en', 'US'));
               },
-              image: 'asset/images/anh-removebg-preview.png',
+              image: 'assets/images/anh-removebg-preview.png',
               name: 'English'),
         ],
       ),
@@ -60,7 +57,7 @@ class translations extends StatelessWidget {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
-            ).tr()
+            )
           ],
         )),
       ),

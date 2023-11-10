@@ -1,7 +1,7 @@
 import 'package:app_lo/home/Controller/getx_controller.dart';
-import 'package:app_lo/home/detailed_screen/detailed.dart';
 import 'package:app_lo/widget/buttom_bar.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:app_lo/widget/drawer.dart';
+import 'package:app_lo/widget/gestureDetector.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,14 +15,16 @@ class MyHome extends StatefulWidget {
 class _MyHomeState extends State<MyHome> {
   final controller = Get.put(getxController());
   final TextEditingController _textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: const Drawers(),
         appBar: AppBar(
           title: const Text(
             "app_bar",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ).tr(),
+          ),
           actions: const [
             Button(),
           ],
@@ -65,42 +67,40 @@ class _MyHomeState extends State<MyHome> {
                 height: 10,
               ),
               Expanded(
-                  child: ListView.builder(
+                child: Obx(() {
+                  if (controller.searchText.isEmpty) {
+                    print("Đang xây dựng lại Obx - : ${controller.searchText}");
+
+                    return ListView.builder(
                       itemCount: controller.listStudent.length,
                       itemBuilder: (context, index) {
                         final item = controller.listStudent[index];
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () {},
-                              child: ListTile(
-                                leading: Text(
-                                  item.id.toString(),
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                title: Text(
-                                  item.name ?? '',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                subtitle: Text(item.email ?? '',
-                                    style: const TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black)),
-                              ),
-                            ),
-                            Divider(
-                              color: Colors.blueGrey[300],
-                            )
-                          ],
+                        return GestureDetectors(
+                          name: item.name ?? '',
+                          id: item.id!,
+                          email: item.email ?? '',
+                          body: item.body ?? '',
                         );
-                      }))
+                      },
+                    );
+                  } else {
+                    print(
+                        "Đang xây dựng lại Obx - searchText: ${controller.searchText}");
+                    return ListView.builder(
+                      itemCount: controller.timkiem.length,
+                      itemBuilder: (context, index) {
+                        final item = controller.timkiem[index];
+                        return GestureDetectors(
+                          name: item.name ?? '',
+                          id: item.id,
+                          email: item.email ?? '',
+                          body: item.body ?? '',
+                        );
+                      },
+                    );
+                  }
+                }),
+              )
             ],
           ),
         ));
